@@ -1,0 +1,69 @@
+p {
+    color: red;
+    font-size: 16px;
+}
+
+.highlight {
+background-color: yellow;
+}
+
+.wrapper {
+    width: 800px;
+    height: 150px;
+    margin: 0 auto;
+}
+
+body{
+    padding: 0px;
+    margin: 0px;
+}
+
+#nav { 
+    width:100px;
+    position: fixed;
+    background-color: beige;
+}
+#nav-placeholder {
+    width: 100px;
+    float: left;
+}
+#banner {
+    width:800px;
+    background-color: blue;
+    height: 100px;
+    clear: both;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+#banner-placeholder {
+    width: 800px;
+    height: 100px;
+}
+#content {
+    width:600px;
+    height: 150px;
+    float: left;
+}
+#footer {
+    width:800px;
+    height: 100px;
+    clear: both;
+}
+#supporting {
+    width:100px;
+    height: 150px;
+    float: left;
+    background-color: green;
+}
+
+div > p {
+    margin-left: 20px;
+}
+
+.container {
+    width: 800px;
+    height: 150px;
+    overflow: hidden;
+}
