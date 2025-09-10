@@ -26,7 +26,7 @@
         }
 
         header {
-            background: rgba(255, 255, 255, 0.95);
+            background: #ffffff;
             padding: 15px;
             border-radius: 0;
             margin-bottom: 20px;
@@ -46,7 +46,7 @@
         }
 
         .navbar {
-            background: rgba(255, 255, 255, 0.9);
+            background: #ffffff;
             padding: 15px;
             border-radius: 0;
             margin-bottom: 20px;
@@ -57,6 +57,8 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
         .nav-links {
@@ -87,15 +89,20 @@
             margin-bottom: 20px;
         }
 
+        /* 側欄收合時，內容區改為單欄避免空白區塊 */
+        .sidebar-collapsed .content {
+            grid-template-columns: 1fr;
+        }
+
         .main-content {
-            background: rgba(255, 255, 255, 0.95);
+            background: #ffffff;
             padding: 30px;
             border-radius: 0;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar {
-            background: rgba(255, 255, 255, 0.95);
+            background: #ffffff;
             padding: 30px;
             border-radius: 0;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -161,7 +168,7 @@
         }
 
         footer {
-            background: rgba(255, 255, 255, 0.95);
+            background: #ffffff;
             padding: 20px;
             border-radius: 0;
             text-align: center;
@@ -207,6 +214,7 @@
                 <li><a href="#practice">練習</a></li>
                 <li><a href="#about">關於</a></li>
                 <li><a href="#contact">聯絡</a></li>
+                <li><a href="#" id="slideToggleTop">切換側欄</a></li>
             </ul>
         </nav>
         </div>
@@ -334,8 +342,8 @@
                         'background': 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)',
                         'color': '#e2e8f0'
                     });
-                    $('.main-content, .sidebar, header, .navbar, footer').css({
-                        'background': 'rgba(45, 55, 72, 0.95)',
+                    $('.main-content, .sidebar, header, .navbar, footer, .masthead').css({
+                        'background': '#2d3748',
                         'color': '#e2e8f0'
                     });
                 } else {
@@ -343,8 +351,8 @@
                         'background': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                         'color': '#333'
                     });
-                    $('.main-content, .sidebar, header, .navbar, footer').css({
-                        'background': 'rgba(255, 255, 255, 0.95)',
+                    $('.main-content, .sidebar, header, .navbar, footer, .masthead').css({
+                        'background': '#ffffff',
                         'color': '#333'
                     });
                 }
@@ -367,9 +375,19 @@
             });
 
             // 滑動切換
-            $('#slideToggle').click(function() {
-                $('.sidebar').slideToggle(500);
-            });
+            function toggleSidebar() {
+                if ($('.sidebar').is(':visible')) {
+                    $('.sidebar').slideUp(500, function() {
+                        $('.container').addClass('sidebar-collapsed');
+                    });
+                } else {
+                    $('.container').removeClass('sidebar-collapsed');
+                    $('.sidebar').slideDown(500);
+                }
+            }
+
+            $('#slideToggle').click(toggleSidebar);
+            $('#slideToggleTop').click(function(e){ e.preventDefault(); toggleSidebar(); });
 
             // 導航連結點擊效果
             $('.nav-links a').click(function(e) {
