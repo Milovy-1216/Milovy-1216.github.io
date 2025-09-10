@@ -27,7 +27,7 @@
 
         header {
             background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
+            padding: 15px;
             border-radius: 0;
             margin-bottom: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -51,6 +51,12 @@
             border-radius: 0;
             margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .masthead {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .nav-links {
@@ -189,6 +195,7 @@
 </head>
 <body>
     <div class="container">
+        <div class="masthead">
         <header>
             <h1>網頁練習頁面</h1>
             <p class="subtitle">HTML + CSS + jQuery 互動練習</p>
@@ -202,6 +209,7 @@
                 <li><a href="#contact">聯絡</a></li>
             </ul>
         </nav>
+        </div>
 
         <div class="content">
             <main class="main-content">
