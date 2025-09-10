@@ -28,7 +28,7 @@
         header {
             background: rgba(255, 255, 255, 0.95);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 0;
             margin-bottom: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
@@ -48,7 +48,7 @@
         .navbar {
             background: rgba(255, 255, 255, 0.9);
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 0;
             margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
@@ -64,7 +64,7 @@
             text-decoration: none;
             color: #4a5568;
             padding: 10px 20px;
-            border-radius: 5px;
+            border-radius: 0;
             transition: all 0.3s ease;
         }
 
@@ -84,14 +84,14 @@
         .main-content {
             background: rgba(255, 255, 255, 0.95);
             padding: 30px;
-            border-radius: 10px;
+            border-radius: 0;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar {
             background: rgba(255, 255, 255, 0.95);
             padding: 30px;
-            border-radius: 10px;
+            border-radius: 0;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
@@ -110,7 +110,7 @@
             color: white;
             border: none;
             padding: 12px 24px;
-            border-radius: 5px;
+            border-radius: 0;
             cursor: pointer;
             font-size: 16px;
             margin: 5px;
@@ -131,7 +131,7 @@
             width: 100px;
             height: 100px;
             background: #e2e8f0;
-            border-radius: 10px;
+            border-radius: 0;
             margin: 10px 0;
             transition: all 0.3s ease;
             border: 2px solid #cbd5e0;
@@ -140,7 +140,7 @@
         .text-display {
             background: #f7fafc;
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 0;
             border-left: 4px solid #667eea;
             margin: 10px 0;
             min-height: 50px;
@@ -157,7 +157,7 @@
         footer {
             background: rgba(255, 255, 255, 0.95);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 0;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
@@ -269,12 +269,15 @@
             $('#changeColor').click(function() {
                 const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3'];
                 const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                // 變更色塊顏色
                 $('#colorBox').css({
                     'background-color': randomColor,
-                    'transform': 'scale(1.1)'
-                }).animate({
-                    'transform': 'scale(1)'
-                }, 300);
+                    'transform': 'scale(1.05)'
+                });
+                // 同步變更整個頁面背景色
+                $('body').css({
+                    'background': randomColor
+                });
             });
 
             // 顯示訊息按鈕
