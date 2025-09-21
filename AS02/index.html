@@ -1,0 +1,206 @@
+<!-- Simple practice webpage: 隨機或按需取得橫幅圖片 (banner)
+     使用方式：打開此 HTML 檔即可預覽；點選「更新圖片」或改變來源/關鍵字可重新載入圖片。
+     提供範例來源：Unsplash Source / Picsum / PlaceIMG
+-->
+
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>練習頁面 — 隨機橫幅圖片</title>
+  <style>
+    :root{ --bg:#f7f9fc; --card:#ffffff; --accent:#3366cc; --muted:#6b7280 }
+    body{font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans CJK TC", "Heiti TC", "PingFang TC", Arial, sans-serif; background:var(--bg); color:#111; margin:0; padding:24px}
+    .container{max-width:900px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    h1{font-size:1.4rem;margin:0}
+    small{color:var(--muted)}
+    .card{background:var(--card);border-radius:12px;box-shadow:0 6px 18px rgba(16,24,40,0.06);padding:16px;margin-top:18px}
+    .banner{width:100%;height:0;padding-bottom:33.33%;position:relative;border-radius:10px;overflow:hidden;background:#e6eef9}
+    .banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+    .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+    select,input[type="text"]{padding:8px;border-radius:8px;border:1px solid #e4e7ef}
+    button{padding:8px 12px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer}
+    button:disabled{opacity:0.6;cursor:default}
+    main p{line-height:1.8;margin-top:14px}
+    footer{margin-top:18px;color:var(--muted);font-size:0.9rem}
+    @media (max-width:520px){header{flex-direction:column;align-items:flex-start} .controls{flex-direction:column;align-items:stretch}}
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>練習頁面：隨機橫幅圖片</h1>
+        <small>示範如何使用線上圖片服務 Picsum 在頁面上動態載入橫幅。</small>
+      </div>
+      <div>
+        <a href="#banner" style="text-decoration:none;color:var(--accent);font-weight:600">跳到橫幅</a>
+      </div>
+    </header>
+
+    <section class="card" aria-labelledby="bannerTitle">
+      <h2 id="bannerTitle">橫幅（Banner）預覽</h2>
+
+      <div id="banner" class="banner" role="img" aria-label="隨機照片橫幅">
+        <img id="bannerImg" alt="隨機風景圖片 - 可按更新重新載入" />
+      </div>
+
+      <div class="controls" aria-hidden="false">
+        <button id="refreshBtn">更新圖片</button>
+        <small style="margin-left: 12px; color: var(--muted);">使用 Picsum 隨機圖片服務</small>
+      </div>
+
+      <script>
+        // 取得元素
+        const bannerImg = document.getElementById('bannerImg');
+        const refreshBtn = document.getElementById('refreshBtn');
+
+        // 建立 Picsum 圖片 URL
+        function buildImageUrl(){
+          const w = 1200, h = 400;
+          return `https://picsum.photos/${w}/${h}?random=${Date.now()}`;
+        }
+
+        // 備用圖片來源（僅 Picsum）
+        const fallbackSources = [
+          'https://picsum.photos/1200/400?random=',
+          'https://picsum.photos/1200/400?blur=1&random='
+        ];
+
+        // 載入備用圖片
+        function loadFallbackImage(index = 0) {
+          if (index >= fallbackSources.length) {
+            // 所有備用來源都失敗，顯示錯誤訊息
+            bannerImg.alt = '無法載入圖片，請檢查網路連線或稍後再試';
+            bannerImg.style.background = 'linear-gradient(45deg, #f0f0f0, #e0e0e0)';
+            bannerImg.style.display = 'flex';
+            bannerImg.style.alignItems = 'center';
+            bannerImg.style.justifyContent = 'center';
+            bannerImg.style.color = '#666';
+            bannerImg.style.fontSize = '16px';
+            bannerImg.style.textAlign = 'center';
+            bannerImg.style.padding = '20px';
+            bannerImg.style.boxSizing = 'border-box';
+            bannerImg.innerHTML = '圖片載入失敗<br>請檢查網路連線';
+            return;
+          }
+          
+          const fallbackUrl = fallbackSources[index] + Date.now();
+          const tmp = new Image();
+          tmp.onload = () => {
+            bannerImg.src = fallbackUrl;
+            bannerImg.removeAttribute('aria-busy');
+            refreshBtn.disabled = false;
+            // 顯示提示訊息
+            showMessage('已載入備用圖片來源', 'info');
+          };
+          tmp.onerror = () => {
+            loadFallbackImage(index + 1);
+          };
+          tmp.src = fallbackUrl;
+        }
+
+        // 顯示訊息提示
+        function showMessage(message, type = 'info') {
+          // 移除現有的訊息
+          const existingMsg = document.querySelector('.message');
+          if (existingMsg) {
+            existingMsg.remove();
+          }
+          
+          const msgDiv = document.createElement('div');
+          msgDiv.className = `message message-${type}`;
+          msgDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            z-index: 1000;
+            max-width: 300px;
+            word-wrap: break-word;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            background: ${type === 'error' ? '#ef4444' : type === 'success' ? '#10b981' : '#3b82f6'};
+          `;
+          msgDiv.textContent = message;
+          document.body.appendChild(msgDiv);
+          
+          // 3秒後自動移除
+          setTimeout(() => {
+            if (msgDiv.parentNode) {
+              msgDiv.parentNode.removeChild(msgDiv);
+            }
+          }, 3000);
+        }
+
+        // 更新圖片的主程序
+        function updateBanner(){
+          const url = buildImageUrl();
+
+          // 在圖片上加上載入中提示（透過 aria-busy）
+          bannerImg.setAttribute('aria-busy','true');
+          refreshBtn.disabled = true;
+          
+          // 重置圖片樣式
+          bannerImg.style.background = '';
+          bannerImg.style.display = '';
+          bannerImg.style.alignItems = '';
+          bannerImg.style.justifyContent = '';
+          bannerImg.style.color = '';
+          bannerImg.style.fontSize = '';
+          bannerImg.style.textAlign = '';
+          bannerImg.style.padding = '';
+          bannerImg.style.boxSizing = '';
+          bannerImg.innerHTML = '';
+
+          // 先用新的圖片 URL，等圖片 load 完再移除 busy
+          const tmp = new Image();
+          tmp.onload = () => {
+            bannerImg.src = url;
+            bannerImg.removeAttribute('aria-busy');
+            refreshBtn.disabled = false;
+            showMessage('圖片載入成功！', 'success');
+          };
+          tmp.onerror = () => {
+            // 若載入失敗，嘗試備用來源
+            console.log('Picsum 載入失敗，嘗試備用來源...');
+            showMessage('主要來源載入失敗，嘗試備用來源...', 'error');
+            loadFallbackImage();
+          };
+          tmp.src = url;
+        }
+
+        refreshBtn.addEventListener('click', updateBanner);
+
+        // 頁面載入時自動顯示隨機圖片
+        document.addEventListener('DOMContentLoaded', function() {
+          // 自動載入 Picsum 圖片
+          updateBanner();
+        });
+
+      </script>
+
+      <main>
+        <h3>文章（示例主題：城市微旅行）</h3>
+        <p>
+          在繁忙的城市生活中，微旅行是一種簡單可行的復原方式：不必遠離城市或花費大量金錢，只需放慢步調，換一條不常走的路，去探索社區的角落、在地小店與街頭的季節風景。透過徒步或單車，你能更靠近城市的紋理與人情，發現街區裡隱藏的咖啡香、老屋翻新的故事與巷弄裡特有的市集節奏。微旅行的美好，在於它容易被重複——每一次重新出發，都能在熟悉之中找到新鮮感，並透過觀察與交流累積你對這座城市的深度理解。
+        </p>
+
+        <p>
+          小提示：出發前列一張小清單（想吃的、想看的、想拍的），並設定彈性的時間表；選擇步行或公共交通，減少對導航的依賴，留更多空間給偶遇與即興。此類短程探索不僅是放鬆的方式，也能激發創意、充實週末生活，並在日常中種下旅行的習慣。
+        </p>
+      </main>
+
+
+      <footer>
+        圖片來源：Picsum Photos (picsum.photos)。示範用途，載入圖片會向第三方服務發出請求。
+      </footer>
+    </section>
+  </div>
+</body>
+</html>
