@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>範例頁面 — Banner + Navigator</title>
+  <style>
+    :root{
+      --nav-height: 64px;
+      --blue: #1e88e5;
+      --orange-red: #ff7043;
+      --bg: #ffffff;
+      --center-bg: #f0f0f0; /* 調整為 #f0f0f0 */
+    }
+    *{box-sizing: border-box}
+    html,body{height:100%;margin:0;font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", "PingFang TC", "Helvetica Neue", Arial; background:var(--bg); color:#222; scroll-behavior:smooth;}
+
+    /* NAVIGATOR sticky */
+    .nav{
+      position:sticky;
+      top:0;
+      z-index:999;
+      height:var(--nav-height);
+      background:rgba(255,255,255,0.95);
+      backdrop-filter: blur(6px);
+      display:flex;
+      align-items:center;
+      border-bottom:1px solid rgba(0,0,0,0.06);
+      transition: box-shadow .18s, background .18s;
+      padding:0 16px;
+    }
+    .nav.sticky{
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+
+    .nav .nav-links{ display:flex; gap:12px; margin-left:auto; align-items:center }
+    .nav .nav-links a{ text-decoration:none; padding:10px 12px; border-radius:8px; color:#333; transition: background .12s, transform .08s }
+    .nav .nav-links a:hover{ background:rgba(30,30,30,0.06); transform:translateY(-1px) }
+    .nav .nav-links a.active{ background:var(--blue); color:white }
+
+    .menu-btn{ display:none; background:none; border:0; font-size:22px; padding:8px; margin-left:auto }
+    .menu-panel{ display:none; position:absolute; right:16px; top:var(--nav-height); background:white; border-radius:8px; box-shadow:0 8px 20px rgba(0,0,0,0.12); overflow:hidden }
+    .menu-panel a{ display:block; padding:10px 14px; text-decoration:none; color:#222; white-space:nowrap }
+    .menu-panel a:hover{ background: #f3f3f5 }
+
+    .hero{ height:100vh; background:var(--blue); display:flex; align-items:center; justify-content:center; color:black; text-align:center; width:100%; margin:0; }
+    .hero h1{ margin:0; font-size: clamp(1.6rem, 4vw, 3rem); letter-spacing: -0.01em }
+
+    .section-banner{ background: linear-gradient(90deg, var(--orange-red), #ff8a65); color:white; display:flex; align-items:center; justify-content:center; text-align:center; height:100vh; width:100%; margin-top:3rem; }
+    .section-banner h2{ margin:0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+
+    /* content area with col-md layout */
+    .section-content{
+      display: flex;
+      justify-content: center;
+      padding:2rem 0;
+      min-height: calc(200vh - 8rem);
+      background: #ffffff; /* margin 背景白色 */
+    }
+    .section-inner{
+      width:100%;
+      max-width: 960px; /* 中間 8 格 */
+      padding:0 2rem; /* side padding */
+      background:var(--center-bg);
+      border-radius:16px;
+      box-shadow: 0 6px 18px rgba(13,13,13,0.08);
+    }
+
+    .group{ margin:0; width:100%; }
+
+    footer{ text-align:center; padding:28px 12px; color:#666 }
+
+    @media (max-width: 900px){
+      :root{ --nav-height:56px }
+      .nav{ padding:0 12px }
+    }
+    @media (max-width: 768px){
+      .nav .nav-links{ display:none }
+      .menu-btn{ display:block }
+      .menu-panel{ display:none; min-width:160px }
+      .section-inner{ padding:0 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <main>
+    <!-- HOME BANNER -->
+    <section id="home" class="hero" aria-label="首頁橫幅">
+      <h1>首頁 Banner</h1>
+    </section>
+
+    <!-- NAV -->
+    <header class="nav" id="siteNav" role="banner">
+      <nav role="navigation" aria-label="主要導覽">
+        <div class="nav-links" id="navLinks">
+          <a href="#home" data-target="home" class="nav-link">首頁</a>
+          <a href="#section1" data-target="section1" class="nav-link">區段1</a>
+          <a href="#section2" data-target="section2" class="nav-link">區段2</a>
+          <a href="#section3" data-target="section3" class="nav-link">區段3</a>
+        </div>
+      </nav>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="開啟選單">☰</button>
+      <div class="menu-panel" id="mobileMenu" role="menu">
+        <a href="#home" data-target="home">首頁</a>
+        <a href="#section1" data-target="section1">區段1</a>
+        <a href="#section2" data-target="section2">區段2</a>
+        <a href="#section3" data-target="section3">區段3</a>
+      </div>
+    </header>
+
+    <!-- Group: section 1 -->
+    <div class="group">
+      <section id="section1" class="section-banner" aria-label="區段一 橫幅">
+        <h2>區段1 Banner</h2>
+      </section>
+      <article class="section-content" aria-labelledby="section1">
+        <div class="section-inner">
+          <h3>區段1 內容</h3>
+          <p>這裡是區段1 的任意內文。</p>
+        </div>
+      </article>
+    </div>
+
+    <!-- Group: section 2 -->
+    <div class="group">
+      <section id="section2" class="section-banner" aria-label="區段二 橫幅">
+        <h2>區段2 Banner</h2>
+      </section>
+      <article class="section-content" aria-labelledby="section2">
+        <div class="section-inner">
+          <h3>區段2 內容</h3>
+          <p>區段2 的任意內文。</p>
+        </div>
+      </article>
+    </div>
+
+    <!-- Group: section 3 -->
+    <div class="group">
+      <section id="section3" class="section-banner" aria-label="區段三 橫幅">
+        <h2>區段3 Banner</h2>
+      </section>
+      <article class="section-content" aria-labelledby="section3">
+        <div class="section-inner">
+          <h3>區段3 內容</h3>
+          <p>區段3 任意內文。</p>
+        </div>
+      </article>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="wrap">© 2025 範例網站 — Footer 內容</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
