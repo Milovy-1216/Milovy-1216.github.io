@@ -43,7 +43,17 @@
     .menu-panel a{ display:block; padding:10px 14px; text-decoration:none; color:#222; white-space:nowrap }
     .menu-panel a:hover{ background: #f3f3f5 }
 
-    .hero{ height:100vh; background:var(--blue); display:flex; align-items:center; justify-content:center; color:black; text-align:center; width:100%; margin:0; }
+    .hero {
+      height: 200px; /* 固定高度 */
+      background: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: black;
+      text-align: center;
+      width: 100%;
+      margin: 0;
+    }
     .hero h1{ margin:0; font-size: clamp(1.6rem, 4vw, 3rem); letter-spacing: -0.01em }
 
     .section-banner{ background: linear-gradient(90deg, var(--orange-red), #ff8a65); color:white; display:flex; align-items:center; justify-content:center; text-align:center; height:100vh; width:100%; margin-top:3rem; }
@@ -87,7 +97,7 @@
   <main>
     <!-- HOME BANNER -->
     <section id="home" class="hero" aria-label="首頁橫幅">
-      <h1>首頁 Banner</h1>
+      <h1>這裡是 Banner</h1>
     </section>
 
     <!-- NAV -->
