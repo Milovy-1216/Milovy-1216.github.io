@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>戰士小斑</title>
+<style>
+  :root{
+    --overlay-height: 50vh; /* 覆蓋高度（視窗高度的一半） */
+    --overlay-bg: rgba(0,0,0,0.55);
+    --text-color: #fff;
+    --transition-speed: 300ms;
+    --max-width: 900px;
+    --chapter-height: 200vh; /* 每個章節佔兩個viewport */
+  }
+
+  html,body{
+    height:100%;
+    margin:0;
+    font-family: "Noto Sans TC", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background:#111;
+    color:var(--text-color);
+    scroll-behavior: smooth;
+  }
+
+  header{
+    position:sticky;
+    top:0;
+    z-index:60;
+    background:linear-gradient(180deg, rgba(0,0,0,0.7), transparent);
+    padding:0.75rem 1rem;
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    box-shadow:0 2px 8px rgba(0,0,0,0.4);
+  }
+  header h1{ margin:0; font-size:1.05rem; letter-spacing:0.4px;}
+  header p{ margin:0; opacity:0.8; font-size:0.9rem;}
+
+  /* 版面容器：每一頁占滿整個 viewport */
+  main{ overflow-x:hidden; }
+
+  .page{
+    height:100vh;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    /* optional content centering */
+    scroll-snap-align:start;
+  }
+
+  /* 首頁樣式 */
+  .home-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .home-content {
+    z-index: 10;
+    padding: 2rem;
+    max-width: 800px;
+    text-align: center;
+  }
+
+  .home-title {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+  }
+
+  .home-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+  }
+
+  .start-btn {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  .start-btn:hover {
+    background: rgba(255,255,255,0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+  }
+
+  /* 章節結構 */
+  .chapter {
+    position: relative;
+    width: 100%;
+    height: var(--chapter-height); /* 兩個viewport高度 */
+    overflow: hidden;
+    scroll-snap-align: start;
+  }
+
+  /* 背景圖層（cover） */
+  .bg{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh; /* 固定一個viewport高度 */
+    background-position:center;
+    background-size:cover;
+    background-repeat:no-repeat;
+    filter: saturate(0.95) contrast(0.95);
+    transform:scale(1.02);
+    transition: transform 600ms ease, filter 0.5s ease-out;
+  }
+
+  /* 確保每個章節的背景圖片只在該章節範圍內顯示 */
+  .chapter .bg {
+    opacity: 0;
+    transition: opacity 0.5s ease-out, filter 0.5s ease-out;
+  }
+  
+  .chapter.active .bg {
+    opacity: 1;
+  }
+
+  /* 畫面中央可選的窄欄（限制最大寬度） */
+  .content-frame{
+    position:relative;
+    z-index:10;
+    width:100%;
+    max-width:var(--max-width);
+    padding:1rem;
+    box-sizing:border-box;
+    pointer-events:none; /* 讓文字以外的地方不阻擋滾動 */
+  }
+
+  /* 半透明覆蓋區塊（固定高度，從下方進場） */
+  .overlay{
+    position:fixed; /* 固定在視窗 */
+    left:0;
+    right:0;
+    bottom:0;
+    height:var(--overlay-height);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:40;
+    transform:translateY(100%); /* 預設隱藏（往下） */
+    transition: transform var(--transition-speed) ease, opacity var(--transition-speed) ease;
+    opacity:0;
+    pointer-events:auto;
+    padding:1.25rem;
+    box-sizing:border-box;
+  }
+
+  /* 內部文字卡（窄版） */
+  .text-card{
+    color: white;
+    padding: 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    text-align: center;
+  }
+
+  .text-card h2{
+    margin:0 0 0.5rem 0;
+    font-size:1.2rem;
+  }
+  .text-card p{ margin:0; line-height:1.6; opacity:0.95; }
+
+  /* 文字覆蓋層 */
+  .text-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100vh; /* 從第一個viewport高度開始 */
+    height: var(--overlay-height);
+    background: var(--overlay-bg);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.8s ease-out;
+  }
+
+  /* 滾動效果 */
+  .chapter .bg {
+    transition: opacity 0.5s ease, filter 0.5s ease;
+  }
+
+  .chapter.scrolled .bg {
+    opacity: 0.3;
+    filter: brightness(0.3);
+  }
+
+  .chapter .text-overlay {
+    transition: opacity 0.5s ease;
+    background: none;
+  }
+
+  .chapter.scrolled .text-overlay {
+    opacity: 1;
+  }
+
+  /* small screen adjustments */
+  @media (max-width:640px){
+    :root{ --overlay-height: 45vh; --max-width:640px; }
+    .text-card h2{ font-size:1.05rem;}
+  }
+
+  /* 滾動輔助：讓每一頁在滾動時貼齊（可選） */
+  html { scroll-behavior: smooth; }
+  body { scroll-snap-type: y proximity; }
+
+  /* 示意頁數小圈圈（可刪） */
+  .pager{
+    position:fixed;
+    right:1rem;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:70;
+    display:flex;
+    flex-direction:column;
+    gap:0.35rem;
+    align-items:center;
+    pointer-events:none;
+  }
+  .pager .dot{
+    width:10px;height:10px;border-radius:50%;
+    background:rgba(255,255,255,0.25);
+    box-shadow:0 0 0 3px rgba(255,255,255,0.03) inset;
+  }
+  .pager .dot.active{ background: #ffd37d; transform:scale(1.2); box-shadow:0 6px 14px rgba(0,0,0,0.4);}
+</style>
+</head>
+<body>
+<header>
+  <h1>戰士小斑</h1>
+</header>
+
+<main id="main">
+  <!-- 首頁 -->
+  <section class="page home-page" id="home" data-title="首頁">
+    <div class="bg" style="background-image:url('pic/0A542D3D-07BD-49AF-ABC3-690D2076415A_1_105_c.jpeg');"></div>
+    <div class="content-frame">
+      <div class="home-content">
+        <h1 class="home-title">戰士小斑</h1>
+        <p class="home-subtitle">一個關於勇氣與生存的故事</p>
+        <a href="#chapter1" class="start-btn">開始閱讀</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 每一個 .chapter 對應繪本的一章，佔兩個viewport -->
+  <section class="chapter" id="chapter1" data-title="第 1 章 — 誕生">
+    <!-- 圖片顯示不出來，通常是路徑或檔名錯誤；先確認 pic/ 資料夾與 moonland-nd77pc.webp 確實存在 -->
+    <div class="bg" style="background-image:url('pic/moonland-nd77pc.webp');"></div>
+    <div class="content-frame"></div>
+    <div class="text-overlay" aria-hidden="true">
+      <div class="text-card">
+        <h2>第 1 章 · 誕生</h2>
+        <p>從前從前，有一隻叫做小斑的虎斑貓誕生了。他有著金色的條紋與明亮的眼睛，覺得世界永遠是溫柔又安全的。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="chapter2" data-title="第 2 章 — 失去家">
+    <div class="bg" style="background-image:url('pic/moonland-o184qi.webp');"></div>
+    <div class="content-frame"></div>
+    <div class="text-overlay" aria-hidden="true">
+      <div class="text-card">
+        <h2>第 2 章 · 失去家</h2>
+        <p>命運的風暴來臨，小斑失去了家人，只能獨自面對這個陌生的世界。雨滴濺在牠的鬍鬚上，眼裡閃著迷茫。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="chapter3" data-title="第 3 章 — 戰士">
+    <div class="bg" style="background-image:url('pic/moonland-gugqxp.webp');"></div>
+    <div class="content-frame"></div>
+    <div class="text-overlay" aria-hidden="true">
+      <div class="text-card">
+        <h2>第 3 章 · 成為戰士</h2>
+        <p>為了活下去，小斑成了一名戰士。他為食物、為庇護所、為明天而戰。身上的每一道傷口，都是生存的徽章。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="chapter4" data-title="第 4 章 — 紅影">
+    <div class="bg" style="background-image:url('pic/moonland-wxqtg8.webp');"></div>
+    <div class="content-frame"></div>
+    <div class="text-overlay" aria-hidden="true">
+      <div class="text-card">
+        <h2>第 4 章 · 紅影</h2>
+        <p>在一場激烈的爭鬥後，一種看不見的疾病潛入了他的血液，那是街貓間流傳的詛咒——「紅影」。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="chapter5" data-title="第 5 章 — 孤立">
+    <div class="bg" style="background-image:url('pic/moonland-wziry5.webp');"></div>
+    <div class="content-frame"></div>
+    <div class="text-overlay" aria-hidden="true">
+      <div class="text-card">
+        <h2>第 5 章 · 被孤立</h2>
+        <p>當街區重回和平，戰士卻成了被孤立的那一個。因為「紅影」，沒有人願意讓他靠近，他只能坐在陰影裡默默看著別人玩耍。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="chapter5.5" data-title="愛滋小貓的前半生">
+    <div class="bg" style="background-image:url('pic/IMG_9209.jpg');"></div>
+    <div class="content-frame">
+      <div class="text-card">
+        <h2 style="text-align: center;">這些是愛滋小貓的前半生</h2>
+        <ul style="text-align:left; line-height:1.8; font-size:1.1rem;text-align: center;">
+          <p>為了生存，他們身上留下了道好不了的傷、伴隨一生的詛咒，但他仍然值得一個溫暖的家，你願意為他創造嗎？</p>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="chapter6" data-title="愛滋小貓">
+    <div class="bg"></div>
+    <div class="content-frame">
+      <div class="text-card">
+        <h2>貓愛滋（FIV）小知識</h2>
+        <ul style="text-align:left; line-height:1.8; font-size:1.1rem;">
+          <li>只會傳染給貓，不會傳染給人或其他動物。</li>
+          <li>主要經由<strong>深度咬傷</strong>傳播，日常打鬧、共食、梳理不會傳染。</li>
+          <li>感染後可能潛伏多年無症狀，仍可正常快樂生活。</li>
+          <li>定期健康檢查、良好照護與室內飼養，可維持高品質壽命。</li>
+          <li>結紮、施打核心疫苗、驅蟲，是保護牠們的關鍵。</li>
+          <li>領養 FIV 貓，只需多一點關注，就能給牠一輩子的愛。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" id="chapter7" data-title="工具使用">
+    <div class="bg";"></div>
+    <div class="content-frame">
+      <div class="text-card">
+        <h2>工具使用</h2>
+        <p>
+          整體利用兩大工具，程式碼透過claude-3.5-sonnet-模型輔助生成，<br>
+          而圖片則是利用台灣企業「夢想動畫」開發的圖像生成模型網站「Moonland」。<br><br>
+          製作過程中嘗試了很多次，但不盡理想<br>
+          甚至嘗試了手繪拍照，讓AI讀，也有特殊效果，還不錯但仍需要不少調整<br><br>
+          最後這是我受到threads啟發的題目，也是我們家斑斑的真實故事改編。
+        </p>
+        <!-- 相關連結區域 -->
+        <div class="links-area" style="margin-top: 2rem; text-align: center;">
+          <h3 style="margin-bottom: 1rem;">延伸閱讀與工具</h3>
+          <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+            <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); color: #fff; text-decoration: none; border-radius: 20px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">Claude 程式碼輔助</a>
+            <a href="https://moonland.ai" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); color: #fff; text-decoration: none; border-radius: 20px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">Moonland 圖像生成</a>
+            <a href="https://www.threads.com/@roytaiwan/post/DPSP-bZkkYX?xmt=AQF0ATFfn32OlAOLVzcBEo3DVwb7x4WfOgJP_o3xtIEe1w&slof=1" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(146, 146, 146, 0.1); color: #fff; text-decoration: none; border-radius: 20px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">Threads 文章</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+</main>
+
+<!-- 小圓點導覽（示意） -->
+<div class="pager" aria-hidden="true" id="pager"></div>
+
+<script>
+/*
+  原理說明：
+  - 每個 .page 含有一個固定位置的 .overlay（置於視窗下方，height = 50vh）
+  - 用 scroll 事件（以 requestAnimationFrame 優化）計算每個 page 在 viewport 的可見比例 ratio
+  - 當 ratio >= 0.5（代表該頁已經被往上捲超過一半），啟動 overlay 的 active 狀態（overlay 從下往上顯示）
+  - 當 ratio < 0.5 時，overlay 隱藏（下移）
+  - 這樣做會產生「先看完整圖，繼續滾動則下半被半透明文字區塊覆蓋」的效果
+*/
+
+(function(){
+  const pages = Array.from(document.querySelectorAll('.chapter'));
+  const overlays = pages.map(p => p.querySelector('.text-overlay'));
+  const pager = document.getElementById('pager');
+
+  // 建立小圓點
+  pages.forEach((p,i) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i===0?' active':'');
+    pager.appendChild(dot);
+  });
+
+  const dots = Array.from(pager.children);
+
+  let ticking = false;
+  function onScroll(){
+    if(!ticking){
+      window.requestAnimationFrame(() => {
+        update();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+
+  function clamp(v, a=0, b=1){ return Math.max(a, Math.min(b, v)); }
+
+  function update(){
+    const vh = window.innerHeight;
+    pages.forEach((page, idx) => {
+      const rect = page.getBoundingClientRect();
+      // ratio 表示該頁距離 viewport top 的「進入程度」(0..1)
+      // 當 rect.top === vh => ratio = 0 (剛進入底部)
+      // 當 rect.top === 0  => ratio = 1 (頂到頂部)
+      // 計算方式： ratio = (vh - rect.top)/vh
+      const ratio = clamp( (vh - rect.top) / vh, 0, 1 );
+
+      // 當 ratio >= 0.5 時啟動 overlay（可調整閾值）
+      const threshold = 0.5;
+      const overlay = overlays[idx];
+
+      if(ratio >= threshold){
+        overlay.classList.add('active');
+        overlay.setAttribute('aria-hidden', 'false');
+      } else {
+        overlay.classList.remove('active');
+        overlay.setAttribute('aria-hidden', 'true');
+      }
+
+      // 更新 pager dots: 最接近中心的 page 為 active
+      const centerDist = Math.abs(rect.top + rect.height/2 - vh/2);
+      page.dataset._centerDist = centerDist;
+    });
+
+    // 找出最靠近中間的頁面，標上 active dot
+    let min = Infinity, minIdx = 0;
+    pages.forEach((p,i)=> {
+      const d = Number(p.dataset._centerDist || Infinity);
+      if(d < min){ min = d; minIdx = i; }
+    });
+    dots.forEach((dot,i)=> dot.classList.toggle('active', i===minIdx));
+  }
+
+  // 首次更新
+  update();
+
+  // 綁定滾動與 resize
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+
+  // optional: 點擊 pager 點跳頁
+  if (dots && dots.length) {
+    dots.forEach((dot,i)=> {
+      if (dot && pages[i]) {
+        dot.style.pointerEvents = 'auto';
+        dot.addEventListener('click', ()=> {
+          pages[i].scrollIntoView({behavior:'smooth'});
+        });
+      }
+    });
+  }
+
+  // 小優化：讓 overlay 不遮擋滑動操作內的連結（如果你有互動按鈕時才會需要）
+})();
+</script>
+<script>
+// 滾動監聽
+document.addEventListener('DOMContentLoaded', function() {
+  const chapters = document.querySelectorAll('.chapter');
+  
+  // 監聽滾動事件
+  window.addEventListener('scroll', function() {
+    // 檢查每個章節的滾動位置
+    chapters.forEach(chapter => {
+      const rect = chapter.getBoundingClientRect();
+      const chapterTop = rect.top;
+      const chapterHeight = rect.height;
+      const windowHeight = window.innerHeight;
+      
+      // 當章節在視窗中時添加active類（控制背景圖片顯示）
+      if (chapterTop < windowHeight && chapterTop > -chapterHeight + windowHeight) {
+        chapter.classList.add('active');
+      } else {
+        chapter.classList.remove('active');
+      }
+      
+      // 當章節滾動到一定程度時添加scrolled類（控制文字區域和背景變暗）
+      if (chapterTop < 0 && chapterTop > -chapterHeight/2) {
+        chapter.classList.add('scrolled');
+      } else {
+        chapter.classList.remove('scrolled');
+      }
+    });
+  });
+  
+  // 初始觸發一次滾動事件
+  window.dispatchEvent(new Event('scroll'));
+  
+  // 首頁背景圖片顯示邏輯
+  const homePage = document.querySelector('.home-page');
+  if (homePage) {
+    const homeBg = homePage.querySelector('.bg');
+    if (homeBg) {
+      // 只在首頁可見範圍內顯示背景圖片
+      window.addEventListener('scroll', function() {
+        const rect = homePage.getBoundingClientRect();
+        const isVisible = rect.bottom > 0 && rect.top < window.innerHeight;
+        homeBg.style.opacity = isVisible ? '1' : '0';
+      });
+      // 初始狀態
+      homeBg.style.opacity = '1';
+    }
+  }
+});
+</script>
+</body>
+</html>
