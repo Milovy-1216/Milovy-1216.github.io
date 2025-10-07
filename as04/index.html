@@ -282,7 +282,7 @@
       <div class="home-content">
         <h1 class="home-title">戰士小斑</h1>
         <p class="home-subtitle">一個關於勇氣與生存的故事</p>
-        <a href="#chapter1" class="start-btn">開始閱讀</a>
+        <a href="#chapter1" class="start-btn" style="position:relative; z-index:1000; pointer-events:auto;" onclick="event.preventDefault(); document.getElementById('chapter1').scrollIntoView({behavior:'smooth'});">開始閱讀</a>
       </div>
     </div>
   </section>
@@ -418,9 +418,12 @@
         <div class="links-area" style="margin-top: 2rem; text-align: center;">
           <h3 style="margin-bottom: 1rem;">延伸閱讀與工具</h3>
           <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
-            <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); color: #fff; text-decoration: none; border-radius: 20px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">Claude 程式碼輔助</a>
-            <a href="https://moonland.ai" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); color: #fff; text-decoration: none; border-radius: 20px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">Moonland 圖像生成</a>
-            <a href="https://www.threads.com/@roytaiwan/post/DPSP-bZkkYX?xmt=AQF0ATFfn32OlAOLVzcBEo3DVwb7x4WfOgJP_o3xtIEe1w&slof=1" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(146, 146, 146, 0.1); color: #fff; text-decoration: none; border-radius: 20px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">Threads 文章</a>
+            <!-- 將連結放在獨立容器並提高 z-index 與 pointer-events -->
+            <div style="position: relative; z-index: 1001; pointer-events: auto;">
+              <a href="https://claude.ai" target="_blank" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); color: #fff; text-decoration: none; border-radius: 20px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">Claude 程式碼輔助</a>
+              <a href="https://moonland.ai" target="_blank" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); color: #fff; text-decoration: none; border-radius: 20px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">Moonland 圖像生成</a>
+              <a href="https://www.threads.com/@roytaiwan/post/DPSP-bZkkYX?xmt=AQF0ATFfn32OlAOLVzcBEo3DVwb7x4WfOgJP_o3xtIEe1w&slof=1" target="_blank" style="display: inline-block; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); color: #fff; text-decoration: none; border-radius: 20px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease;">Threads 文章</a>
+            </div>
           </div>
         </div>
       </div>
