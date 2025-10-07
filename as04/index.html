@@ -1,259 +1,284 @@
+<!-- HTML5 文件類型聲明 -->
 <!doctype html>
+<!-- 設置頁面語言為繁體中文 -->
 <html lang="zh-Hant">
 <head>
+<!-- 設置字符編碼為 UTF-8 -->
 <meta charset="utf-8" />
+<!-- 設置視口，確保網頁在不同設備上響應式顯示 -->
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<!-- 網頁標題，顯示在瀏覽器標籤頁上 -->
 <title>戰士小斑</title>
 <style>
+  /* CSS 變數定義 */
   :root{
     --overlay-height: 50vh; /* 覆蓋高度（視窗高度的一半） */
-    --overlay-bg: rgba(0,0,0,0.55);
-    --text-color: #fff;
-    --transition-speed: 300ms;
-    --max-width: 900px;
+    --overlay-bg: rgba(0,0,0,0.55); /* 覆蓋層背景顏色 */
+    --text-color: #fff; /* 文字顏色 */
+    --transition-speed: 300ms; /* 過渡動畫速度 */
+    --max-width: 900px; /* 最大內容寬度 */
     --chapter-height: 200vh; /* 每個章節佔兩個viewport */
   }
 
+  /* 全局樣式：HTML 和 Body */
   html,body{
-    height:100%;
-    margin:0;
-    font-family: "Noto Sans TC", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    background:#111;
-    color:var(--text-color);
-    scroll-behavior: smooth;
+    height:100%; /* 設置高度為 100% */
+    margin:0; /* 移除默認外邊距 */
+    font-family: "Noto Sans TC", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; /* 字體設置 */
+    background:#111; /* 背景顏色 */
+    color:var(--text-color); /* 文字顏色使用 CSS 變數 */
+    scroll-behavior: smooth; /* 平滑滾動效果 */
   }
 
+  /* 頁面頂部導航欄樣式 */
   header{
-    position:sticky;
-    top:0;
-    z-index:60;
-    background:linear-gradient(180deg, rgba(0,0,0,0.7), transparent);
-    padding:0.75rem 1rem;
-    display:flex;
-    align-items:center;
-    gap:1rem;
-    box-shadow:0 2px 8px rgba(0,0,0,0.4);
+    position:sticky; /* 粘性定位，滾動時固定在頂部 */
+    top:0; /* 固定在頂部 */
+    z-index:60; /* 設置堆疊順序 */
+    background:linear-gradient(180deg, rgba(0,0,0,0.7), transparent); /* 背景漸變 */
+    padding:0.75rem 1rem; /* 內邊距 */
+    display:flex; /* 彈性盒子佈局 */
+    align-items:center; /* 垂直居中對齊 */
+    gap:1rem; /* 元素間距 */
+    box-shadow:0 2px 8px rgba(0,0,0,0.4); /* 陰影效果 */
   }
-  header h1{ margin:0; font-size:1.05rem; letter-spacing:0.4px;}
-  header p{ margin:0; opacity:0.8; font-size:0.9rem;}
+  header h1{ margin:0; font-size:1.05rem; letter-spacing:0.4px;} /* 標題樣式 */
+  header p{ margin:0; opacity:0.8; font-size:0.9rem;} /* 段落樣式 */
 
   /* 版面容器：每一頁占滿整個 viewport */
-  main{ overflow-x:hidden; }
+  main{ overflow-x:hidden; } /* 隱藏水平滾動條 */
 
+  /* 頁面通用樣式 */
   .page{
-    height:100vh;
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    height:100vh; /* 設置高度為視窗高度的 100% */
+    position:relative; /* 相對定位 */
+    display:flex; /* 彈性盒子佈局 */
+    align-items:center; /* 垂直居中對齊 */
+    justify-content:center; /* 水平居中對齊 */
     /* optional content centering */
-    scroll-snap-align:start;
+    scroll-snap-align:start; /* 滾動對齊到起始位置 */
   }
 
   /* 首頁樣式 */
+  /* 首頁樣式 */
   .home-page {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    display: flex; /* 彈性盒子佈局 */
+    align-items: center; /* 垂直居中對齊 */
+    justify-content: center; /* 水平居中對齊 */
+    text-align: center; /* 文字居中 */
   }
 
+  /* 首頁內容區塊樣式 */
   .home-content {
-    z-index: 10;
-    padding: 2rem;
-    max-width: 800px;
-    text-align: center;
+    z-index: 10; /* 設置堆疊順序 */
+    padding: 2rem; /* 內邊距 */
+    max-width: 800px; /* 最大寬度 */
+    text-align: center; /* 文字居中 */
   }
 
+  /* 首頁標題樣式 */
   .home-title {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+    font-size: 4rem; /* 字體大小 */
+    margin-bottom: 1rem; /* 下外邊距 */
+    text-shadow: 0 2px 10px rgba(0,0,0,0.7); /* 文字陰影 */
   }
 
+  /* 首頁副標題樣式 */
   .home-subtitle {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
-    opacity: 0.9;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+    font-size: 1.5rem; /* 字體大小 */
+    margin-bottom: 2rem; /* 下外邊距 */
+    opacity: 0.9; /* 透明度 */
+    text-shadow: 0 2px 8px rgba(0,0,0,0.7); /* 文字陰影 */
   }
 
+  /* 開始按鈕樣式 */
   .start-btn {
-    display: inline-block;
-    padding: 0.8rem 2rem;
-    background: rgba(255,255,255,0.15);
-    color: #fff;
-    text-decoration: none;
-    border-radius: 30px;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    display: inline-block; /* 行內塊級元素 */
+    padding: 0.8rem 2rem; /* 內邊距 */
+    background: rgba(255,255,255,0.15); /* 背景顏色 */
+    color: #fff; /* 文字顏色 */
+    text-decoration: none; /* 移除下劃線 */
+    border-radius: 30px; /* 圓角 */
+    font-size: 1.2rem; /* 字體大小 */
+    transition: all 0.3s ease; /* 過渡動畫 */
+    backdrop-filter: blur(5px); /* 背景模糊效果 */
+    border: 1px solid rgba(255,255,255,0.1); /* 邊框 */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3); /* 陰影效果 */
   }
 
+  /* 開始按鈕懸停效果 */
   .start-btn:hover {
-    background: rgba(255,255,255,0.25);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+    background: rgba(255,255,255,0.25); /* 懸停時背景顏色 */
+    transform: translateY(-3px); /* 向上移動 */
+    box-shadow: 0 6px 25px rgba(0,0,0,0.4); /* 懸停時陰影效果 */
   }
 
-  /* 章節結構 */
+  /* 章節結構樣式 */
   .chapter {
-    position: relative;
-    width: 100%;
-    height: var(--chapter-height); /* 兩個viewport高度 */
-    overflow: hidden;
-    scroll-snap-align: start;
+    position: relative; /* 相對定位 */
+    width: 100%; /* 寬度佔滿 */
+    height: var(--chapter-height); /* 高度使用 CSS 變數 */
+    overflow: hidden; /* 隱藏溢出內容 */
+    scroll-snap-align: start; /* 滾動對齊到起始位置 */
   }
 
-  /* 背景圖層（cover） */
+  /* 背景圖層樣式 */
   .bg{
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100vh; /* 固定一個viewport高度 */
-    background-position:center;
-    background-size:cover;
-    background-repeat:no-repeat;
-    filter: saturate(0.95) contrast(0.95);
-    transform:scale(1.02);
-    transition: transform 600ms ease, filter 0.5s ease-out;
+    position: fixed; /* 固定定位 */
+    top: 0; /* 距離頂部 0 */
+    left: 0; /* 距離左側 0 */
+    right: 0; /* 距離右側 0 */
+    height: 100vh; /* 高度為視窗高度的 100% */
+    background-position:center; /* 背景圖片居中 */
+    background-size:cover; /* 背景圖片覆蓋整個元素 */
+    background-repeat:no-repeat; /* 背景圖片不重複 */
+    filter: saturate(0.95) contrast(0.95); /* 濾鏡效果 */
+    transform:scale(1.02); /* 稍微放大 */
+    transition: transform 600ms ease, filter 0.5s ease-out; /* 過渡動畫 */
   }
 
   /* 確保每個章節的背景圖片只在該章節範圍內顯示 */
   .chapter .bg {
-    opacity: 0;
-    transition: opacity 0.5s ease-out, filter 0.5s ease-out;
+    opacity: 0; /* 默認透明 */
+    transition: opacity 0.5s ease-out, filter 0.5s ease-out; /* 過渡動畫 */
   }
   
+  /* 當章節激活時顯示背景圖片 */
   .chapter.active .bg {
-    opacity: 1;
+    opacity: 1; /* 顯示背景圖片 */
   }
 
-  /* 畫面中央可選的窄欄（限制最大寬度） */
+  /* 畫面中央內容框架樣式 */
   .content-frame{
-    position:relative;
-    z-index:10;
-    width:100%;
-    max-width:var(--max-width);
-    padding:1rem;
-    box-sizing:border-box;
+    position:relative; /* 相對定位 */
+    z-index:10; /* 設置堆疊順序 */
+    width:100%; /* 寬度佔滿 */
+    max-width:var(--max-width); /* 最大寬度使用 CSS 變數 */
+    padding:1rem; /* 內邊距 */
+    box-sizing:border-box; /* 盒模型設置 */
     pointer-events:none; /* 讓文字以外的地方不阻擋滾動 */
   }
 
-  /* 半透明覆蓋區塊（固定高度，從下方進場） */
+  /* 半透明覆蓋區塊樣式 */
   .overlay{
     position:fixed; /* 固定在視窗 */
-    left:0;
-    right:0;
-    bottom:0;
-    height:var(--overlay-height);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    z-index:40;
+    left:0; /* 距離左側 0 */
+    right:0; /* 距離右側 0 */
+    bottom:0; /* 距離底部 0 */
+    height:var(--overlay-height); /* 高度使用 CSS 變數 */
+    display:flex; /* 彈性盒子佈局 */
+    align-items:center; /* 垂直居中對齊 */
+    justify-content:center; /* 水平居中對齊 */
+    z-index:40; /* 設置堆疊順序 */
     transform:translateY(100%); /* 預設隱藏（往下） */
-    transition: transform var(--transition-speed) ease, opacity var(--transition-speed) ease;
-    opacity:0;
-    pointer-events:auto;
-    padding:1.25rem;
-    box-sizing:border-box;
+    transition: transform var(--transition-speed) ease, opacity var(--transition-speed) ease; /* 過渡動畫 */
+    opacity:0; /* 默認透明 */
+    pointer-events:auto; /* 允許鼠標事件 */
+    padding:1.25rem; /* 內邊距 */
+    box-sizing:border-box; /* 盒模型設置 */
   }
 
-  /* 內部文字卡（窄版） */
+  /* 內部文字卡樣式 */
   .text-card{
-    color: white;
-    padding: 2rem;
-    max-width: 600px;
-    margin: 0 auto;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    text-align: center;
+    color: white; /* 文字顏色 */
+    padding: 2rem; /* 內邊距 */
+    max-width: 600px; /* 最大寬度 */
+    margin: 0 auto; /* 水平居中 */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* 文字陰影 */
+    text-align: center; /* 文字居中 */
   }
 
   .text-card h2{
-    margin:0 0 0.5rem 0;
-    font-size:1.2rem;
+    margin:0 0 0.5rem 0; /* 外邊距 */
+    font-size:1.2rem; /* 字體大小 */
   }
-  .text-card p{ margin:0; line-height:1.6; opacity:0.95; }
+  .text-card p{ margin:0; line-height:1.6; opacity:0.95; } /* 段落樣式 */
 
   /* 文字覆蓋層 */
+  /* 文字覆蓋層樣式 */
   .text-overlay {
-    position: absolute;
-    left: 0;
-    right: 0;
+    position: absolute; /* 絕對定位 */
+    left: 0; /* 距離左側 0 */
+    right: 0; /* 距離右側 0 */
     top: 100vh; /* 從第一個viewport高度開始 */
-    height: var(--overlay-height);
-    background: var(--overlay-bg);
-    z-index: 3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.8s ease-out;
+    height: var(--overlay-height); /* 高度使用 CSS 變數 */
+    background: var(--overlay-bg); /* 背景顏色使用 CSS 變數 */
+    z-index: 3; /* 設置堆疊順序 */
+    display: flex; /* 彈性盒子佈局 */
+    align-items: center; /* 垂直居中對齊 */
+    justify-content: center; /* 水平居中對齊 */
+    opacity: 0; /* 默認透明 */
+    transition: opacity 0.8s ease-out; /* 過渡動畫 */
   }
 
-  /* 滾動效果 */
+  /* 滾動效果：章節背景 */
   .chapter .bg {
-    transition: opacity 0.5s ease, filter 0.5s ease;
+    transition: opacity 0.5s ease, filter 0.5s ease; /* 過渡動畫 */
   }
 
+  /* 章節滾動時背景變暗 */
   .chapter.scrolled .bg {
-    opacity: 0.3;
-    filter: brightness(0.3);
+    opacity: 0.3; /* 透明度 */
+    filter: brightness(0.3); /* 亮度 */
   }
 
+  /* 滾動效果：章節文字覆蓋層 */
   .chapter .text-overlay {
-    transition: opacity 0.5s ease;
-    background: none;
+    transition: opacity 0.5s ease; /* 過渡動畫 */
+    background: none; /* 移除背景 */
   }
 
+  /* 章節滾動時文字覆蓋層顯示 */
   .chapter.scrolled .text-overlay {
-    opacity: 1;
+    opacity: 1; /* 顯示文字覆蓋層 */
   }
 
   /* small screen adjustments */
-  @media (max-width:640px){
-    :root{ --overlay-height: 45vh; --max-width:640px; }
-    .text-card h2{ font-size:1.05rem;}
+  @media (max-width:640px){ /* 當螢幕寬度小於 640px 時應用 */
+    :root{ --overlay-height: 45vh; --max-width:640px; } /* 調整 CSS 變數 */
+    .text-card h2{ font-size:1.05rem;} /* 調整標題字體大小 */
   }
 
   /* 滾動輔助：讓每一頁在滾動時貼齊（可選） */
-  html { scroll-behavior: smooth; }
-  body { scroll-snap-type: y proximity; }
+  html { scroll-behavior: smooth; } /* 平滑滾動 */
+  body { scroll-snap-type: y proximity; } /* 啟用滾動捕捉 */
 
   /* 示意頁數小圈圈（可刪） */
   .pager{
-    position:fixed;
-    right:1rem;
-    top:50%;
-    transform:translateY(-50%);
-    z-index:70;
-    display:flex;
-    flex-direction:column;
-    gap:0.35rem;
-    align-items:center;
-    pointer-events:none;
+    position:fixed; /* 固定定位 */
+    right:1rem; /* 距離右側 1rem */
+    top:50%; /* 距離頂部 50% */
+    transform:translateY(-50%); /* 垂直居中 */
+    z-index:70; /* 設置堆疊順序 */
+    display:flex; /* 彈性盒子佈局 */
+    flex-direction:column; /* 垂直排列 */
+    gap:0.35rem; /* 元素間距 */
+    align-items:center; /* 水平居中對齊 */
+    pointer-events:none; /* 不響應鼠標事件 */
   }
   .pager .dot{
-    width:10px;height:10px;border-radius:50%;
-    background:rgba(255,255,255,0.25);
-    box-shadow:0 0 0 3px rgba(255,255,255,0.03) inset;
+    width:10px;height:10px;border-radius:50%; /* 圓點樣式 */
+    background:rgba(255,255,255,0.25); /* 背景顏色 */
+    box-shadow:0 0 0 3px rgba(255,255,255,0.03) inset; /* 陰影效果 */
   }
-  .pager .dot.active{ background: #ffd37d; transform:scale(1.2); box-shadow:0 6px 14px rgba(0,0,0,0.4);}
+  .pager .dot.active{ background: #ffd37d; transform:scale(1.2); box-shadow:0 6px 14px rgba(0,0,0,0.4);} /* 激活狀態的圓點樣式 */
 </style>
 </head>
 <body>
+<!-- 頁面頂部導航欄 -->
 <header>
   <h1>戰士小斑</h1>
 </header>
 
+<!-- 主要內容區域 -->
 <main id="main">
   <!-- 首頁 -->
   <section class="page home-page" id="home" data-title="首頁">
+    <!-- 背景圖片 -->
     <div class="bg" style="background-image:url('pic/0A542D3D-07BD-49AF-ABC3-690D2076415A_1_105_c.jpeg');"></div>
+    <!-- 內容框架 -->
     <div class="content-frame">
+      <!-- 首頁內容 -->
       <div class="home-content">
         <h1 class="home-title">戰士小斑</h1>
         <p class="home-subtitle">一個關於勇氣與生存的故事</p>
@@ -265,9 +290,13 @@
   <!-- 每一個 .chapter 對應繪本的一章，佔兩個viewport -->
   <section class="chapter" id="chapter1" data-title="第 1 章 — 誕生">
     <!-- 圖片顯示不出來，通常是路徑或檔名錯誤；先確認 pic/ 資料夾與 moonland-nd77pc.webp 確實存在 -->
+    <!-- 章節背景圖片 -->
     <div class="bg" style="background-image:url('pic/moonland-nd77pc.webp');"></div>
+    <!-- 章節內容框架 -->
     <div class="content-frame"></div>
+    <!-- 章節文字覆蓋層 -->
     <div class="text-overlay" aria-hidden="true">
+      <!-- 文字卡片 -->
       <div class="text-card">
         <h2>第 1 章 · 誕生</h2>
         <p>從前從前，有一隻叫做小斑的虎斑貓誕生了。他有著金色的條紋與明亮的眼睛，覺得世界永遠是溫柔又安全的。</p>
@@ -276,9 +305,13 @@
   </section>
 
   <section class="chapter" id="chapter2" data-title="第 2 章 — 失去家">
+    <!-- 章節背景圖片 -->
     <div class="bg" style="background-image:url('pic/moonland-o184qi.webp');"></div>
+    <!-- 章節內容框架 -->
     <div class="content-frame"></div>
+    <!-- 章節文字覆蓋層 -->
     <div class="text-overlay" aria-hidden="true">
+      <!-- 文字卡片 -->
       <div class="text-card">
         <h2>第 2 章 · 失去家</h2>
         <p>命運的風暴來臨，小斑失去了家人，只能獨自面對這個陌生的世界。雨滴濺在牠的鬍鬚上，眼裡閃著迷茫。</p>
@@ -287,9 +320,13 @@
   </section>
 
   <section class="chapter" id="chapter3" data-title="第 3 章 — 戰士">
+    <!-- 章節背景圖片 -->
     <div class="bg" style="background-image:url('pic/moonland-gugqxp.webp');"></div>
+    <!-- 章節內容框架 -->
     <div class="content-frame"></div>
+    <!-- 章節文字覆蓋層 -->
     <div class="text-overlay" aria-hidden="true">
+      <!-- 文字卡片 -->
       <div class="text-card">
         <h2>第 3 章 · 成為戰士</h2>
         <p>為了活下去，小斑成了一名戰士。他為食物、為庇護所、為明天而戰。身上的每一道傷口，都是生存的徽章。</p>
@@ -298,9 +335,13 @@
   </section>
 
   <section class="chapter" id="chapter4" data-title="第 4 章 — 紅影">
+    <!-- 章節背景圖片 -->
     <div class="bg" style="background-image:url('pic/moonland-wxqtg8.webp');"></div>
+    <!-- 章節內容框架 -->
     <div class="content-frame"></div>
+    <!-- 章節文字覆蓋層 -->
     <div class="text-overlay" aria-hidden="true">
+      <!-- 文字卡片 -->
       <div class="text-card">
         <h2>第 4 章 · 紅影</h2>
         <p>在一場激烈的爭鬥後，一種看不見的疾病潛入了他的血液，那是街貓間流傳的詛咒——「紅影」。</p>
@@ -309,9 +350,13 @@
   </section>
 
   <section class="chapter" id="chapter5" data-title="第 5 章 — 孤立">
+    <!-- 章節背景圖片 -->
     <div class="bg" style="background-image:url('pic/moonland-wziry5.webp');"></div>
+    <!-- 章節內容框架 -->
     <div class="content-frame"></div>
+    <!-- 章節文字覆蓋層 -->
     <div class="text-overlay" aria-hidden="true">
+      <!-- 文字卡片 -->
       <div class="text-card">
         <h2>第 5 章 · 被孤立</h2>
         <p>當街區重回和平，戰士卻成了被孤立的那一個。因為「紅影」，沒有人願意讓他靠近，他只能坐在陰影裡默默看著別人玩耍。</p>
@@ -320,9 +365,13 @@
   </section>
 
   <section class="chapter" id="chapter5.5" data-title="愛滋小貓的前半生">
+    <!-- 章節背景圖片 -->
     <div class="bg" style="background-image:url('pic/IMG_9209.jpg');"></div>
+    <!-- 章節內容框架 -->
     <div class="content-frame"></div>
+    <!-- 章節文字覆蓋層 -->
     <div class="text-overlay" aria-hidden="true">
+      <!-- 文字卡片 -->
       <div class="text-card">
         <h2>這些是愛滋小貓的前半生</h2>
         <p>為了生存，他們身上留下了道好不了的傷、伴隨一生的詛咒，但他仍然值得一個溫暖的家，你願意為他創造嗎？</p>
@@ -331,8 +380,11 @@
   </section>
 
   <section class="page" id="chapter6" data-title="愛滋小貓">
+    <!-- 章節背景圖片 -->
     <div class="bg"></div>
+    <!-- 章節內容框架 -->
     <div class="content-frame">
+      <!-- 文字卡片 -->
       <div class="text-card">
         <h2>貓愛滋（FIV）小知識</h2>
         <ul style="text-align:left; line-height:1.8; font-size:1.1rem;">
@@ -348,8 +400,11 @@
   </section>
 
   <section class="page" id="chapter7" data-title="工具使用">
+    <!-- 章節背景圖片 -->
     <div class="bg";"></div>
+    <!-- 章節內容框架 -->
     <div class="content-frame">
+      <!-- 文字卡片 -->
       <div class="text-card">
         <h2>工具使用</h2>
         <p>
@@ -390,57 +445,64 @@
 */
 
 (function(){
+  // 獲取所有章節元素
   const pages = Array.from(document.querySelectorAll('.chapter'));
+  // 獲取所有文字覆蓋層元素
   const overlays = pages.map(p => p.querySelector('.text-overlay'));
+  // 獲取分頁器元素
   const pager = document.getElementById('pager');
 
   // 建立小圓點
   pages.forEach((p,i) => {
-    const dot = document.createElement('div');
-    dot.className = 'dot' + (i===0?' active':'');
-    pager.appendChild(dot);
+    const dot = document.createElement('div'); // 創建一個 div 元素作為圓點
+    dot.className = 'dot' + (i===0?' active':''); // 設置圓點的 class，第一個圓點默認激活
+    pager.appendChild(dot); // 將圓點添加到分頁器中
   });
 
+  // 獲取所有圓點元素
   const dots = Array.from(pager.children);
 
-  let ticking = false;
+  let ticking = false; // 滾動節流標誌
+  // 滾動事件處理函數
   function onScroll(){
     if(!ticking){
       window.requestAnimationFrame(() => {
-        update();
+        update(); // 更新頁面狀態
         ticking = false;
       });
       ticking = true;
     }
   }
 
+  // 限制數值在指定範圍內
   function clamp(v, a=0, b=1){ return Math.max(a, Math.min(b, v)); }
 
+  // 更新頁面狀態函數
   function update(){
-    const vh = window.innerHeight;
+    const vh = window.innerHeight; // 獲取視窗高度
     pages.forEach((page, idx) => {
-      const rect = page.getBoundingClientRect();
+      const rect = page.getBoundingClientRect(); // 獲取章節元素的位置和大小
       // ratio 表示該頁距離 viewport top 的「進入程度」(0..1)
       // 當 rect.top === vh => ratio = 0 (剛進入底部)
       // 當 rect.top === 0  => ratio = 1 (頂到頂部)
       // 計算方式： ratio = (vh - rect.top)/vh
-      const ratio = clamp( (vh - rect.top) / vh, 0, 1 );
+      const ratio = clamp( (vh - rect.top) / vh, 0, 1 ); // 計算滾動比例
 
       // 當 ratio >= 0.5 時啟動 overlay（可調整閾值）
-      const threshold = 0.5;
-      const overlay = overlays[idx];
+      const threshold = 0.5; // 閾值
+      const overlay = overlays[idx]; // 當前章節的文字覆蓋層
 
       if(ratio >= threshold){
-        overlay.classList.add('active');
-        overlay.setAttribute('aria-hidden', 'false');
+        overlay.classList.add('active'); // 添加 active class
+        overlay.setAttribute('aria-hidden', 'false'); // 設置 aria-hidden 屬性
       } else {
-        overlay.classList.remove('active');
-        overlay.setAttribute('aria-hidden', 'true');
+        overlay.classList.remove('active'); // 移除 active class
+        overlay.setAttribute('aria-hidden', 'true'); // 設置 aria-hidden 屬性
       }
 
       // 更新 pager dots: 最接近中心的 page 為 active
-      const centerDist = Math.abs(rect.top + rect.height/2 - vh/2);
-      page.dataset._centerDist = centerDist;
+      const centerDist = Math.abs(rect.top + rect.height/2 - vh/2); // 計算章節中心與視窗中心的距離
+      page.dataset._centerDist = centerDist; // 存儲距離
     });
 
     // 找出最靠近中間的頁面，標上 active dot
@@ -449,23 +511,23 @@
       const d = Number(p.dataset._centerDist || Infinity);
       if(d < min){ min = d; minIdx = i; }
     });
-    dots.forEach((dot,i)=> dot.classList.toggle('active', i===minIdx));
+    dots.forEach((dot,i)=> dot.classList.toggle('active', i===minIdx)); // 設置激活的圓點
   }
 
   // 首次更新
   update();
 
-  // 綁定滾動與 resize
-  window.addEventListener('scroll', onScroll, {passive:true});
-  window.addEventListener('resize', onScroll);
+  // 綁定滾動與 resize 事件
+  window.addEventListener('scroll', onScroll, {passive:true}); // 滾動事件
+  window.addEventListener('resize', onScroll); // 視窗大小改變事件
 
   // optional: 點擊 pager 點跳頁
   if (dots && dots.length) {
     dots.forEach((dot,i)=> {
       if (dot && pages[i]) {
-        dot.style.pointerEvents = 'auto';
+        dot.style.pointerEvents = 'auto'; // 允許鼠標事件
         dot.addEventListener('click', ()=> {
-          pages[i].scrollIntoView({behavior:'smooth'});
+          pages[i].scrollIntoView({behavior:'smooth'}); // 平滑滾動到指定章節
         });
       }
     });
@@ -477,48 +539,48 @@
 <script>
 // 滾動監聽
 document.addEventListener('DOMContentLoaded', function() {
-  const chapters = document.querySelectorAll('.chapter');
+  const chapters = document.querySelectorAll('.chapter'); // 獲取所有章節元素
   
   // 監聽滾動事件
   window.addEventListener('scroll', function() {
     // 檢查每個章節的滾動位置
     chapters.forEach(chapter => {
-      const rect = chapter.getBoundingClientRect();
-      const chapterTop = rect.top;
-      const chapterHeight = rect.height;
-      const windowHeight = window.innerHeight;
+      const rect = chapter.getBoundingClientRect(); // 獲取章節元素的位置和大小
+      const chapterTop = rect.top; // 章節頂部距離視窗頂部的距離
+      const chapterHeight = rect.height; // 章節高度
+      const windowHeight = window.innerHeight; // 視窗高度
       
       // 當章節在視窗中時添加active類（控制背景圖片顯示）
       if (chapterTop < windowHeight && chapterTop > -chapterHeight + windowHeight) {
-        chapter.classList.add('active');
+        chapter.classList.add('active'); // 添加 active class
       } else {
-        chapter.classList.remove('active');
+        chapter.classList.remove('active'); // 移除 active class
       }
       
       // 當章節滾動到一定程度時添加scrolled類（控制文字區域和背景變暗）
       if (chapterTop < 0 && chapterTop > -chapterHeight/2) {
-        chapter.classList.add('scrolled');
+        chapter.classList.add('scrolled'); // 添加 scrolled class
       } else {
-        chapter.classList.remove('scrolled');
+        chapter.classList.remove('scrolled'); // 移除 scrolled class
       }
     });
   });
   
-  // 初始觸發一次滾動事件
+  // 初始觸發一次滾動事件，確保頁面加載時狀態正確
   window.dispatchEvent(new Event('scroll'));
   
   // 首頁背景圖片顯示邏輯
-  const homePage = document.querySelector('.home-page');
+  const homePage = document.querySelector('.home-page'); // 獲取首頁元素
   if (homePage) {
-    const homeBg = homePage.querySelector('.bg');
+    const homeBg = homePage.querySelector('.bg'); // 獲取首頁背景元素
     if (homeBg) {
       // 只在首頁可見範圍內顯示背景圖片
       window.addEventListener('scroll', function() {
-        const rect = homePage.getBoundingClientRect();
-        const isVisible = rect.bottom > 0 && rect.top < window.innerHeight;
-        homeBg.style.opacity = isVisible ? '1' : '0';
+        const rect = homePage.getBoundingClientRect(); // 獲取首頁元素的位置和大小
+        const isVisible = rect.bottom > 0 && rect.top < window.innerHeight; // 判斷首頁是否可見
+        homeBg.style.opacity = isVisible ? '1' : '0'; // 根據可見性設置背景透明度
       });
-      // 初始狀態
+      // 初始狀態：首頁背景默認顯示
       homeBg.style.opacity = '1';
     }
   }
