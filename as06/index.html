@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>捲動觸發動態效果 (onscroll 實作)</title>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>捲動觸發動態效果</h1>
+        <p>請向下捲動以查看三種不同的捲動觸發效果。這個範例使用傳統的 <code>onscroll</code> 事件搭配節流閥 (Throttle) 來實作。</p>
+    </div>
+
+    <div class="spacer">(向下捲動...)</div>
+
+    <div class="container">
+        <h2>效果一：智慧翻卡</h2>
+        <p>當下方卡片的「中心點」通過螢幕的「中心點」時，卡片將會自動翻轉。滾動離開中心時會翻回來。</p>
+        <div class="card-container">
+            <div class="card-inner" id="flipCard">
+                <div class="card-front">
+                    <img src="https://picsum.photos/seed/tech/700/350" alt="正面圖片">
+                </div>
+                <div class="card-back">
+                    <h3>卡片背面</h3>
+                    <p>這是在卡片背面的說明文字。當您捲動到螢幕中央時，這個內容就會顯現。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="spacer">(繼續向下捲動...)</div>
+
+    <div class="container">
+        <h2>效果二：專注模式</h2>
+        <p>當您閱讀完一個章節，該章節的「底部」即將離開「螢幕頂端」時，該章節會自動淡出，幫助您專注在下一個章節。</p>
+
+        <section class="focusable-section" id="section1">
+            <h2>章節一：旅程的起點</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae nisl eu nisl feugiat consequat. Donec congue, nisl et scelerisque eleifend, turpis tellus feugiat erat, et rhoncus erat dolor velNunc ut felis. Inhac habitasse platea dictumst. Integer nisl. In quis justo. Maecenas rhoncus aliquam lacus.</p>
+            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+        </section>
+
+        <section class="focusable-section" id="section2">
+            <h2>章節二：探索新大陸</h2>
+            <p>Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui.</p>
+            <p>Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.</p>
+        </section>
+    </div>
+
+    <div class="spacer">(最後一個效果...)</div>
+
+    <div class="container">
+        <h2>效果三：滾動繪製底線 (可重複觸發)</h2>
+        <p>
+            當特定文字<span class="highlight-on-scroll">滾動進入</span>可視範圍時，底線會自動「畫」出來。
+            當它滾出範圍時，底線會<span class="highlight-on-scroll">自動消失</span>，滾回來時會<span class="highlight-on-scroll">再次觸發</span>。
+        </p>
+        <p>
+            Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. 
+            Nam nulla quam, gravida non, commodo a, sodales sit amet, nisi.
+            Pellentesque fermentum dolor. Aliquam quam lectus, <span class="highlight-on-scroll">facilisis auctor</span>, ultrices ut, elementum vulputate, nunc.
+            Suspendisse potenti. <span class="highlight-on-scroll">Pellentesque</span> habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+        </p>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae nisl eu nisl feugiat consequat. 
+            Donec congue, nisl et scelerisque eleifend, turpis tellus feugiat erat, et 
+            <span class="highlight-on-scroll">rhoncus erat</span> dolor vel. 
+            Nunc ut felis. In hac habitasse platea dictumst. Integer nisl. In quis justo. Maecenas rhoncus aliquam lacus.
+        </p>
+        <p>
+            Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et 
+            <span class="highlight-on-scroll">sapien ullamcorper</span> pharetra. 
+            Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. 
+            Aenean fermentum, elit eget <span class="highlight-on-scroll">tincidunt condimentum</span>, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui.
+        </p>
+    </div>
+
+    <div class="spacer" style="height: 50vh;">(頁面底部)</div>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
