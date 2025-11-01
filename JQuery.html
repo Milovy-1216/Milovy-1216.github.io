@@ -1,0 +1,63 @@
+<!-- 宣告文件類型為 HTML5，這是所有 HTML 文件的開頭。 -->
+<!doctype html>
+<!-- HTML 文件的根元素，lang="en" 表示文件內容的主要語言是英文，有助於搜尋引擎和輔助技術。 -->
+<html lang="en">
+  <!-- <head> 標籤包含文件的元數據（metadata），這些資訊不會直接顯示在網頁上，但對瀏覽器和搜尋引擎很重要。 -->
+    <head>
+        <!-- 設定文件的字符編碼為 UTF-8，確保網頁能正確顯示各種語言的文字，避免亂碼。 -->
+        <meta charset="utf-8">
+        <!-- 設定視口（viewport）的行為，使網頁在不同設備上（如手機、平板）能良好響應，width=device-width 讓寬度等於設備寬度，initial-scale=1 設置初始縮放比例。 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- 設定網頁的標題，會顯示在瀏覽器的標籤頁或視窗標題列上。 -->
+        <title>Bootstrap demo</title>
+        <!-- 引入 Bootstrap 5.3.8 的 CSS 樣式表，用於網頁的排版和樣式設計。integrity 和 crossorigin 屬性用於內容安全策略（CSP），確保 CDN 載入的檔案未被篡改。 -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <style>
+            .fixed{
+                position: fixed;
+                top: 0;
+            }
+        </style>
+    </head>
+  <!-- <body> 標籤包含網頁的所有可見內容，如文字、圖片、連結等。 -->
+  <body>
+    <!-- 引入 Bootstrap 5.3.8 的 JavaScript 檔案，提供互動功能，如導航欄、輪播等。同樣包含 integrity 和 crossorigin 屬性。 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <!-- 註解：提示 jQuery CDN 連結應該放在這裡。 -->
+    <!-- 引入 jQuery 3.7.1 的 JavaScript 檔案，jQuery 是一個快速、小型且功能豐富的 JavaScript 函式庫，簡化了 HTML 文件遍歷、事件處理、動畫和 Ajax 互動。同樣包含 integrity 和 crossorigin 屬性。 -->
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+    
+    <div class="container-fluid bg-primary vh-100 text-white p-5">
+    </div>
+    
+    <div id="fixed" class="container-fluid bg-warning text-white p-5" style="height: 50px;">
+        <p id="fixedText"></p>
+        <p id="currentPos"></p>
+    </div>
+    <div class="container-fluid bg-dark vh-100 text-white p-5">
+        </div>
+    <div class="container-fluid bg-primary vh-100 text-white p-5">
+    </div>
+
+    <script>
+        // 當整個文檔（DOM）加載完成後執行此函數，確保所有 HTML 元素都已準備好被操作。
+        $(document).ready(function(){
+            var pos_fixed = $("#fixed").offset().top;
+            console.log(pos_fixed);
+            $("#fixedText").html("固定在頂部的文字，位置：" + pos_fixed);
+            $(window).scroll(function(){
+                var scroll_pos = $(window).scrollTop();
+                $("#currentPos").html("當前位置：" + scroll_pos);
+                if(scroll_pos >= pos_fixed){
+                    $("#fixed").addClass("fixed");
+                }else{
+                    $("#fixed").removeClass("fixed");
+                }
+            });
+        });
+    </script>
+    
+
+</body>
+<!-- HTML 文件的結束標籤。 -->
+</html>

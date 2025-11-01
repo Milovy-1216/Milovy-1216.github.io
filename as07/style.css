@@ -1,0 +1,113 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+    overflow-x: hidden; /* 防止橫向滾動條 */
+}
+
+.full-screen {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #f0f0f0;
+}
+
+#title-page {
+    background-color: #fdef69;
+}
+
+#text-page1 {
+    background-color: #fdc357;
+}
+
+#growth-diary-page {
+    background-color: #fdef69;
+}
+
+/* ---------------------------------------------------- */
+/* 1. 第一個動畫 (#h-scroll-container) 的 CSS (保持不變) */
+/* ---------------------------------------------------- */
+#h-scroll-container {
+    position: relative;
+    height: 500vh; /* 創造足夠的滾動空間 */
+    background-color: #ccc;
+}
+
+.image-stack {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+#h-scroll-container .stacked-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    opacity: 0;
+}
+
+
+/* ---------------------------------------------------- */
+/* 2. 連續今昔對比動畫 (修正後) */
+/* ---------------------------------------------------- */
+
+#overlay-h-scroll-container {
+    position: relative;
+    /* 【關鍵】
+      我們有 3 次動畫 (2蓋1, 3蓋2, 4蓋3)。
+      每次動畫滾動 100vh (即 200vh - 100vh 視窗)。
+      總高度 = 3 * 100vh (滾動距離) + 100vh (視窗) = 400vh。
+    */
+    height: 400vh; 
+    background-color: #333; /* 換個背景色以區分 */
+}
+
+/* Sticky 容器 */
+.map-comparison-sticky-wrapper {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* clip-path 不需要這個，但保留無妨 */
+}
+
+/* 應用於所有 4 張地圖的基礎樣式 */
+.map-image {
+    position: absolute; /* 讓它們疊在一起 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover; /* 確保圖片填滿視窗 */
+}
+
+/* 【關鍵：Z-index 堆疊順序】
+  map-4 (最新) 在最上層。
+  map-1 (最舊) 在最下層。
+*/
+.map-1 { z-index: 1; }
+.map-2 { z-index: 2; }
+.map-3 { z-index: 3; }
+.map-4 { z-index: 4; }
+
+/* 【動畫核心：clip-path】
+  我們要對 map-2, map-3, map-4 應用動畫。
+  它們的初始狀態都是 "被裁切掉 100%" (完全不可見)，
+  這樣才能露出它們下面的圖層。
+*/
+.map-2,
+.map-3,
+.map-4 {
+    /* 初始狀態：從左側裁切 100%，圖片完全不可見 */
+    clip-path: inset(0% 0% 0% 100%);
+}
