@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>滾動敘事網站</title>
+    <!-- 載入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 載入 Noto Sans TC 字體 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- 載入外部 CSS 樣式 -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-black text-gray-100">
+
+    <!-- ==== 1. 登陸頁面 (Landing Page) ==== -->
+    <section id="landing-page" class="h-screen flex items-center justify-center text-center p-8 relative">
+        <div class="max-w-2xl z-10">
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6">
+                故事的起點
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-12">
+                這是一段隨機填充的介紹文字，描述這個互動體驗的核心概念。
+            </p>
+            <!-- 
+                將按鈕改為 <a> 標籤，點擊後平滑滾動到下一區域 
+            -->
+            <a href="#onboarding-page"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg transition duration-300 transform hover:scale-105">
+                開始探索
+            </a>
+        </div>
+        <!-- 滾動提示 -->
+        <div class="absolute bottom-10 text-white z-10 animate-bounce">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+        </div>
+        <!-- 登陸頁背景影片 -->
+        <div class="absolute inset-0 w-full h-full overflow-hidden z-0 video-overlay">
+            <video class="w-full h-full object-cover" 
+                   src="https://assets.mixkit.co/videos/preview/mixkit-waving-water-in-a-loop-5120-large.mp4" 
+                   poster="https://placehold.co/1920x1080/111/333?text=載入中..."
+                   autoplay loop muted playsinline>
+            </video>
+        </div>
+    </section>
+
+    <!-- ==== 2. 引導與簡介 (Onboarding Page) ==== -->
+    <section id="onboarding-page" class="py-24 px-8 bg-gray-900">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-4">引導與簡介</h2>
+            <p class="text-lg text-gray-400 text-center mb-12">
+                繼續向下滑動，開始你的旅程。
+            </p>
+
+            <!-- 影片縮圖網格 (僅為展示，無點擊功能) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- 縮圖 1 -->
+                <div class="rounded-lg overflow-hidden shadow-xl">
+                    <img src="https://placehold.co/600x400/5E81AC/FFFFFF?text=章節一預覽" alt="章節一縮圖" class="w-full h-auto">
+                    <div class="p-4 bg-gray-800"><h3 class="text-xl font-semibold">章節一：開端</h3></div>
+                </div>
+                <!-- 縮圖 2 -->
+                <div class="rounded-lg overflow-hidden shadow-xl">
+                    <img src="https://placehold.co/600x400/BF616A/FFFFFF?text=章節二預覽" alt="章節二縮圖" class="w-full h-auto">
+                    <div class="p-4 bg-gray-800"><h3 class="text-xl font-semibold">章節二：衝突</h3></div>
+                </div>
+                <!-- 縮圖 3 -->
+                <div class="rounded-lg overflow-hidden shadow-xl">
+                    <img src="https://placehold.co/600x400/A3BE8C/FFFFFF?text=章節三預覽" alt="章節三縮圖" class="w-full h-auto">
+                    <div class="p-4 bg-gray-800"><h3 class="text-xl font-semibold">章節三：轉折</h3></div>
+                </div>
+                <!-- 縮圖 4 -->
+                <div class="rounded-lg overflow-hidden shadow-xl">
+                    <img src="https://placehold.co/600x400/EBCB8B/FFFFFF?text=章節四預覽" alt="章節四縮圖" class="w-full h-auto">
+                    <div class="p-4 bg-gray-800"><h3 class="text-xl font-semibold">章節四：結局</h3></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ==== 3. 主章節 (Core Narrative Chapters) ==== -->
+    <!-- 
+        這是滾動敘事的核心結構。
+        .chapter-container 是一個相對定位的容器。
+        .video-panel 是「固定」的，它會停留在頂部。
+        .text-panel 是「滾動」的，它會疊在影片上滾動。
+        .text-panel 的高度（透過內部的 spacer）決定了影片被固定的「時間」。
+    -->
+
+    <!-- 章節 1 -->
+    <section id="chapter-1" class="chapter-container relative">
+        <!-- 
+            影片面板 (固定的)
+            sticky top-0 h-screen 會讓它在滾動到頂部時固定住
+        -->
+        <div class="video-panel sticky top-0 h-screen w-full overflow-hidden z-0 video-overlay">
+            <video class="chapter-video w-full h-full object-cover" 
+                   src="video/moonland-jdkrye.mp4" 
+                   poster="https://placehold.co/1920x1080/333/555?text=章節一影片"
+                   loop muted playsinline>
+            </video>
+        </div>
+        
+        <!-- 
+            文字面板 (滾動的)
+            relative z-10 讓它疊在影片之上
+        -->
+        <div class="text-panel relative z-10 w-full">
+            <!-- 
+                第一個 spacer (h-screen) 用來推動內容，
+                讓使用者滾動整整一螢幕的高度，影片才會固定
+            -->
+            <div class="h-screen"></div>
+            
+            <!-- 文字內容方塊 1 -->
+            <div class="text-content-block max-w-xl mx-auto p-8 bg-black bg-opacity-70 backdrop-blur-sm rounded-lg mb-96">
+                <h2 class="text-4xl font-bold mb-8">章節一：開端</h2>
+                <p class="text-lg leading-relaxed">這是一段隨機填充的內文。在這裡，故事開始展開。第一幕的設置非常重要，它為觀眾設定了基調和期望。我們將會看到主角的第一次登場。</p>
+            </div>
+
+            <!-- 文字內容方塊 2 -->
+            <div class="text-content-block max-w-xl mx-auto p-8 bg-black bg-opacity-70 backdrop-blur-sm rounded-lg mb-96">
+                <p class="text-lg leading-relaxed">隨機填充內文，請替換成您的真實內容。隨著使用者的滾動，更多的故事細節將被揭露。光影交錯，音樂漸強。這只是個開始。</p>
+            </div>
+
+            <!-- 
+                最後一個 spacer (h-screen) 用來推動下一個章節，
+                當它滾動完畢時，這個章節（包含固定的影片）才會向上滾出
+            -->
+            <div class="h-screen"></div>
+        </div>
+    </section>
+
+    <!-- 章節 2 -->
+    <section id="chapter-2" class="chapter-container relative">
+        <!-- 影片面板 (固定的) -->
+        <div class="video-panel sticky top-0 h-screen w-full overflow-hidden z-0 video-overlay">
+            <video class="chapter-video w-full h-full object-cover" 
+                   src="https://assets.mixkit.co/videos/preview/mixkit-red-exotic-loop-3D-background-4008-large.mp4" 
+                   poster="https://placehold.co/1920x1080/444/666?text=章節二影片"
+                   loop muted playsinline>
+            </video>
+        </div>
+        
+        <!-- 文字面板 (滾動的) -->
+        <div class="text-panel relative z-10 w-full">
+            <div class="h-screen"></div>
+            <div class="text-content-block max-w-xl mx-auto p-8 bg-black bg-opacity-70 backdrop-blur-sm rounded-lg mb-96">
+                <h2 class="text-4xl font-bold mb-8">章節二：衝突</h2>
+                <p class="text-lg leading-relaxed">隨機填充內文。衝突加劇，主角面臨第一個真正的挑戰。這段文字應該隨著影片的播放而滾動。</p>
+            </div>
+            <div class="text-content-block max-w-xl mx-auto p-8 bg-black bg-opacity-70 backdrop-blur-sm rounded-lg mb-96">
+                <p class="text-lg leading-relaxed">更多的敘述... 隨機填充內文。隨機填充內文。隨機填充內文。隨機填充內文。隨機填充內文。隨機填充內文。</p>
+            </div>
+            <div class="h-screen"></div>
+        </div>
+    </section>
+
+    <!-- 章節 3 -->
+    <section id="chapter-3" class="chapter-container relative">
+        <!-- 影片面板 (固定的) -->
+        <div class="video-panel sticky top-0 h-screen w-full overflow-hidden z-0 video-overlay">
+            <video class="chapter-video w-full h-full object-cover" 
+                   src="https://assets.mixkit.co/videos/preview/mixkit-blue-and-pink-waves-loop-video-4007-large.mp4" 
+                   poster="https://placehold.co/1920x1080/555/777?text=章節三影片"
+                   loop muted playsinline>
+            </video>
+        </div>
+        
+        <!-- 文字面板 (滾動的) -->
+        <div class="text-panel relative z-10 w-full">
+            <div class="h-screen"></div>
+            <div class="text-content-block max-w-xl mx-auto p-8 bg-black bg-opacity-70 backdrop-blur-sm rounded-lg mb-96">
+                <h2 class="text-4xl font-bold mb-8">章節三：轉折</h2>
+                <p class="text-lg leading-relaxed">隨機填充內文。故事迎來了意想不到的轉折。這段文字應該隨著影片的播放而滾動。</p>
+            </div>
+            <div class="text-content-block max-w-xl mx-auto p-8 bg-black bg-opacity-70 backdrop-blur-sm rounded-lg mb-96">
+                <p class="text-lg leading-relaxed">隨機填充內文。隨機填充內文。隨機填充內文。隨機填充內文。隨機填充內文。隨機填充內文。隨機填充內文。</p>
+            </div>
+            <div class="h-screen"></div>
+        </div>
+    </section>
+
+    <!-- 章節 4 -->
+    <section id="chapter-4" class="chapter-container relative">
+        <!-- 影片面板 (固定的) -->
+        <div class="video-panel sticky top-0 h-screen w-full overflow-hidden z-0 video-overlay">
+            <video class="chapter-video w-full h-full object-cover" 
+                   src="https://assets.mixkit.co/videos/preview/mixkit-waves-in-a-cold-sea-5250-large.mp4" 
+                   poster="https://placehold.co/1920x1080/666/888?text=章節四影片"
+                   loop muted playsinline>
+            </video>
+        </div>
+        
+        <!-- 文字面板 (滾動的) -->
+        <div class="text-panel relative z-10 w-full">
+            <div class="h-screen"></div>
+            <div class="text-content-block max-w-xl mx-auto p-8 bg-black bg-opacity-70 backdrop-blur-sm rounded-lg mb-96">
+                <h2 class="text-4xl font-bold mb-8">章節四：結局</h2>
+                <p class="text-lg leading-relaxed">隨機填充內文。所有的線索匯集於此，故事達到高潮並走向結局。這段文字應該隨著影片的播放而滾動。</p>
+            </div>
+            <div class="text-content-block max-w-xl mx-auto p-8 bg-black bg-opacity-70 backdrop-blur-sm rounded-lg mb-96">
+                <p class="text-lg leading-relaxed">（...更多內文...）</p>
+                <p class="text-lg leading-relaxed">故事結束。</p>
+                <!-- 返回頂部 -->
+                <a href="#landing-page" class="mt-8 inline-block text-blue-400 hover:text-blue-300 transition">&uarr; 返回最開頭</a>
+            </div>
+            <div class="h-screen"></div>
+        </div>
+    </section>
+
+
+    <!-- 載入外部 JavaScript -->
+    <script src="script.js"></script>
+
+</body>
+</html>
