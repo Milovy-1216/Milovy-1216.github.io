@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Web Builder</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar: Component Palette -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Components</h2>
+            </div>
+            <div class="components-list">
+                <div class="draggable-item" draggable="true" data-type="header">
+                    <div class="icon">H</div>
+                    <span>Header</span>
+                </div>
+                <div class="draggable-item" draggable="true" data-type="hero">
+                    <div class="icon">B</div>
+                    <span>Hero Banner</span>
+                </div>
+                <div class="draggable-item" draggable="true" data-type="features">
+                    <div class="icon">F</div>
+                    <span>Features</span>
+                </div>
+                <div class="draggable-item" draggable="true" data-type="content">
+                    <div class="icon">T</div>
+                    <span>Text Content</span>
+                </div>
+                <div class="draggable-item" draggable="true" data-type="footer">
+                    <div class="icon">_</div>
+                    <span>Footer</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="workspace">
+            <!-- Toolbar -->
+            <header class="toolbar">
+                <div class="toolbar-left">
+                    <h1>Untitled Page</h1>
+                </div>
+                <div class="toolbar-right">
+                    <button id="clear-btn" class="btn btn-secondary">Clear</button>
+                    <button id="preview-btn" class="btn btn-secondary">Preview</button>
+                    <button id="export-btn" class="btn btn-primary">Export HTML</button>
+                </div>
+            </header>
+
+            <!-- Canvas (Drop Zone) -->
+            <div class="canvas-container">
+                <div id="canvas" class="canvas">
+                    <div class="empty-state">
+                        <p>Drag components here to start building</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Templates for Blocks (Hidden) -->
+    <template id="tpl-header">
+        <header class="block-header" contenteditable="true">
+            <div class="container">
+                <div class="logo">Logo</div>
+                <nav>
+                    <a href="#">Home</a>
+                    <a href="#">About</a>
+                    <a href="#">Contact</a>
+                </nav>
+            </div>
+        </header>
+    </template>
+
+    <template id="tpl-hero">
+        <section class="block-hero" contenteditable="true">
+            <div class="container">
+                <h1>Hero Title</h1>
+                <p>Subtitle goes here. Click to edit.</p>
+                <button class="btn-cta">Call to Action</button>
+            </div>
+        </section>
+    </template>
+
+    <template id="tpl-features">
+        <section class="block-features" contenteditable="true">
+            <div class="container">
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <h3>Feature 1</h3>
+                        <p>Description for feature 1.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>Feature 2</h3>
+                        <p>Description for feature 2.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>Feature 3</h3>
+                        <p>Description for feature 3.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <template id="tpl-content">
+        <section class="block-content" contenteditable="true">
+            <div class="container">
+                <h2>Content Section</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+        </section>
+    </template>
+
+    <template id="tpl-footer">
+        <footer class="block-footer" contenteditable="true">
+            <div class="container">
+                <p>&copy; 2024 My Website. All rights reserved.</p>
+            </div>
+        </footer>
+    </template>
+
+    <script src="script.js"></script>
+</body>
+</html>

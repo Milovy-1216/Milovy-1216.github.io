@@ -1,0 +1,316 @@
+:root {
+    --bg-color: #f5f5f5;
+    --sidebar-bg: #ffffff;
+    --border-color: #e0e0e0;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --accent-color: #0066ff;
+    /* Figma Blue-ish */
+    --accent-hover: #0052cc;
+    --canvas-bg: #ffffff;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    height: 100vh;
+    overflow: hidden;
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    flex-shrink: 0;
+}
+
+.sidebar-header h2 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.components-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.draggable-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: grab;
+    transition: all 0.2s ease;
+}
+
+.draggable-item:hover {
+    border-color: var(--accent-color);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+}
+
+.draggable-item .icon {
+    width: 24px;
+    height: 24px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--text-secondary);
+}
+
+/* Workspace */
+.workspace {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Toolbar */
+.toolbar {
+    height: 60px;
+    background-color: var(--sidebar-bg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.toolbar h1 {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.toolbar-right {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background-color: #f5f5f5;
+}
+
+.btn-primary {
+    background-color: var(--text-primary);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #000;
+}
+
+/* Canvas */
+.canvas-container {
+    flex: 1;
+    background-color: #e5e5e5;
+    /* Distinct from canvas bg */
+    padding: 40px;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.canvas {
+    width: 100%;
+    max-width: 1200px;
+    min-height: 800px;
+    background-color: var(--canvas-bg);
+    box-shadow: var(--shadow-md);
+    position: relative;
+}
+
+.empty-state {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    border: 2px dashed var(--border-color);
+    margin: 20px;
+    border-radius: 8px;
+    pointer-events: none;
+    /* Let drops pass through to canvas */
+}
+
+/* Block Styles (In-Canvas) */
+.canvas-block {
+    position: relative;
+    border: 1px solid transparent;
+    /* For hover effect */
+}
+
+.canvas-block:hover {
+    border: 1px solid var(--accent-color);
+}
+
+.canvas-block:hover::after {
+    content: "Drag to reorder";
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: var(--accent-color);
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    pointer-events: none;
+}
+
+.block-actions {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: none;
+    gap: 5px;
+    z-index: 10;
+}
+
+.canvas-block:hover .block-actions {
+    display: flex;
+}
+
+.action-btn {
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.action-btn:hover {
+    background: #f0f0f0;
+    color: red;
+}
+
+/* Default Block Styles (for the blocks themselves) */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.block-header {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+}
+
+.block-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.block-header nav a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #333;
+}
+
+.block-hero {
+    background: #f8f9fa;
+    padding: 80px 0;
+    text-align: center;
+}
+
+.block-hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.block-hero .btn-cta {
+    background: #000;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.block-features {
+    padding: 60px 0;
+    background: #fff;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.feature-item {
+    text-align: center;
+    padding: 20px;
+}
+
+.block-content {
+    padding: 40px 0;
+    line-height: 1.6;
+}
+
+.block-footer {
+    background: #333;
+    color: #fff;
+    padding: 40px 0;
+    text-align: center;
+}
+
+/* Dragging visual cues */
+.dragging {
+    opacity: 0.5;
+}
+
+.drop-target {
+    border-top: 2px solid var(--accent-color);
+}
